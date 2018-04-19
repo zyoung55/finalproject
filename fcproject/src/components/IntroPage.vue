@@ -31,13 +31,14 @@ already, please feel free to make a username and password so your scores can be 
        <div v-if="incorrectGuess">
        	  <p> Nope. Try again. </p>
        </div>
-       <div v-if="solutionDisplay">
+       <p>Note: Operators include '+', '-', and '*'. Integers must be between 1 and 10.</p>
+        <div v-if="solutionDisplay">
          <h1>Solution</h1>
          <ul>
-	   <li v-for="solutions in solution">
-	      {{ solutions }}
-	   </li>
-	 </ul>
+           <li v-for="solutions in solution">
+              {{ solutions }}
+           </li>
+         </ul>
        </div>
     </div>
 </div>
@@ -80,7 +81,7 @@ already, please feel free to make a username and password so your scores can be 
 		this.operatorNumOne = Math.floor(Math.random() * 3);
                 this.operatorNumTwo = Math.floor(Math.random() * 3);
 		this.numberOne = Math.floor(Math.random() * 51);
-		this.numberTwo = Math.floor(Math.random() * 11);
+		this.numberTwo = Math.floor(Math.random() * 10) + 1;
 		if (this.operatoNumOne === 0) {
 		   this.operatorOne = '+';
 		}

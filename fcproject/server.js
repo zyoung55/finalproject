@@ -16,6 +16,11 @@ const knex = require('knex')(config);
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+app.post('/api/scores', (req, res) => {
+      	knex('scores').insert({user_id: req.body.id, score: req.body.score});
+	return;
+    }); 
+
 app.post('/api/login', (req, res) => {
 	if (!req.body.email || !req.body.password) {
 	    return res.status(400).send();

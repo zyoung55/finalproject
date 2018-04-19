@@ -43,8 +43,7 @@ export default {
 		   this.email = '',
 		   this.username = '',
 		   this.password = ''
-		   this.registerError = this.$store.getters.registerError;
-		   console.log(this.registerError);
+		   this.registerError = this.$store.getters.registerError; 
 		   if (this.registerError === '') {
 		       this.registeredSuccess = true;
 		       this.registeredFailure = false;

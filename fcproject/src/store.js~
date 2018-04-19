@@ -11,17 +11,22 @@ export default new Vuex.Store({
 	    loggedIn: false,
 	    loginError: '',
 	    registerError: '',
+		//score: '',
 	},
 	    getters: {
 	    user: state => state.user,
 		loggedIn: state => state.loggedIn,
 		loginError: state => state.loginError,
-		registerError: state => state.registerError
+		registerError: state => state.registerError,
+		//score: state => state.score,
 	},
 	    mutations: {
 	    setUser (state, user) {
 		state.user = user;
 	    },
+	    pushScore (state, score) {
+		state.user.push(score);
+	    },    
 	    setLogin (state, loggedInStatus) {
 	        state.loggedIn = loggedInStatus;
 	    },
@@ -30,17 +35,18 @@ export default new Vuex.Store({
 	    },
 	    setRegisterError (state, currentRegisterError) {
 		state.registerError = currentRegisterError;
-	    }
+	    },
+		/*setScore (state, currentScore) {
+		state.score = currentScore;
+		},*/
 	},
 	    actions: {
 	    login (context, user) {
-		console.log("DRAKE AND JOSH");
 		axios.post("/api/login", user).then(response => {
 			context.commit('setUser', response.data.user);
 			context.commit('setLogin', true);
 			context.commit('setLoginError', '');
 			context.commit('setRegisterError', '');
-			/*console.log(user, 'getLoggedIn');*/
 		    }).catch(error => {
 			    context.commit('setLogin', false);
 			    if (error.response.status === 400) {
@@ -52,9 +58,7 @@ export default new Vuex.Store({
 			});
 	    },
 	    register (context, user) {
-		console.log("user", user);
 		axios.post("/api/users", user).then(response => {
-			console.log("user", user);
 			context.commit('setUser', response.data.user);
 			context.commit('setLogin', true);
 			context.commit('setLoginError', '');
@@ -75,11 +79,14 @@ export default new Vuex.Store({
 			    }
 			});
 		    },
-	    logout (context, user) {
+	    logout (context) {
 		context.commit('setUser', {});
 		context.commit('setLogin', false);
 		context.commit('setLoginError', '');
 		context.commit('setRegisterError', '');
-	    }
-	 }
+	    },					
+	    addScore(context, score) {
+		axios.post("/api/scores", context.state..user);
+	    },
+	}
 });

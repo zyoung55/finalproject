@@ -24,14 +24,19 @@ free to make a username and password so your scores can be saved!</p>
           <input v-model="numberGuess" placeholder="Integer Guess">
           <button type="submit">Guess</button>
        </form>
-       <form v-on:submit.prevent="solutionFlip">                                                                                                                                    
-         <button type="submit">Show Solution</button>                                                                                                                                      </form>
+       <form v-on:submit.prevent="solutionFlip">
+         <button type="submit">Show Solution</button>
+       </form>
+       <form v-on:submit.prevent="submitScore">
+          <button type="submit">Submit Score</button>
+       </form>
        <div v-if="correctGuess">
           <p> You're right. Great job! Press "Start Game" to try again.</p>
        </div>
        <div v-if="incorrectGuess">
           <p> Nope. Try again. </p>
        </div>
+       <p>Note: Operators include '+', '-', and '*'. Integers must be between 1 and 10.</p>
        <div v-if="solutionDisplay">
          <h1>Solution</h1>
          <ul>
@@ -81,7 +86,7 @@ createGame: function() {
                 this.operatorNumOne = Math.floor(Math.random() * 3);
                 this.operatorNumTwo = Math.floor(Math.random() * 3);
                 this.numberOne = Math.floor(Math.random() * 51);
-                this.numberTwo = Math.floor(Math.random() * 11);
+                this.numberTwo = Math.floor(Math.random() * 10) + 1;
                 if (this.operatoNumOne === 0) {
                    this.operatorOne = '+';
                 }
@@ -107,9 +112,6 @@ createGame: function() {
                    this.operatorTwo = '/'
                 }
 		var originalNum = this.numberOne;
-                console.log("operatorOne:", this.operatorOne, "numberOne:", this.numberOne)
-                console.log("this.numberOne:", this.numberOne);
-                console.log(this.numberOne);
                 this.visualNumbers.push(this.numberOne);
                 for (var i = 0; i < 5; ++i) {
                    if (this.operatorOne === '+') {
@@ -124,7 +126,6 @@ createGame: function() {
                    if (this.operatorOne === '/') {
                       this.numberOne /= this.numberTwo;
                    }
-                   //console.log("this.numberOne:", this.numberOne);
                    this.visualNumbers.push(this.numberOne);
                 }
                 if (this.operatorOne === '') {
@@ -139,7 +140,6 @@ createGame: function() {
                       this.solutionDisplay = true;
         },
 	checkGuess : function() {
-		   //this.correctGuess = false;
 		   this.incorrectGuess = false;
                    if (this.operatorGuess === this.solution[0] &&
                       (this.numberGuess / 1 ) === this.solution[1]) {
@@ -147,16 +147,20 @@ createGame: function() {
 		      ++this.currentNumCorrect;
                       console.log("hotmama");
                    }
-                   //console.log("this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
                    else {
                         this.incorrectGuess = true;
 			this.currentNumCorrect = 0;
                    }
-                   console.log("operatorGuess:", this.operatorGuess, "numberGuess:", this.numberGuess, "this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
-                   this.operatorGuess = '';
+                    this.operatorGuess = '';
                    this.numberGuess = '';
         },
-},
+	submitScore : function() {
+		    console.log("yay!");
+		    this.$store.dispatch('addScore', this.currentNumCorrect);		   
+		    this.currentNumCorrect = 0;
+		    }
+	},
+	
 }
 </script>
 
@@ -171,5 +175,9 @@ li {
    padding: 5px;
    border: black 1px;
    text-align: center;
+}
+
+#show-solution {
+    float: right;
 }
 </style>
