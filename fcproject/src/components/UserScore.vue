@@ -13,19 +13,19 @@ free to make a username and password so your scores can be saved!</p>
         </form>
     </div>
     <div v-if="gameStarted">
+       <p> Current Number Correct: {{currentNumCorrect}} </p>
        <ul>
          <li v-for="number in visualNumbers">
              {{ number }}
          </li>
        </ul>
-       <form v-on:submit.prevent="solutionFlip">
-         <button type="submit">Show Solution</button>
-       </form>
        <form v-on:submit.prevent="checkGuess">
           <input v-model="operatorGuess" placeholder="Operator Guess">
           <input v-model="numberGuess" placeholder="Integer Guess">
           <button type="submit">Guess</button>
        </form>
+       <form v-on:submit.prevent="solutionFlip">                                                                                                                                    
+         <button type="submit">Show Solution</button>                                                                                                                                      </form>
        <div v-if="correctGuess">
           <p> You're right. Great job! Press "Start Game" to try again.</p>
        </div>
@@ -64,6 +64,7 @@ data() {
           numberTwo: 0,
           operatorGuess: '',
           numberGuess: '',
+	  currentNumCorrect: 0,
           }
    },
    methods: {
@@ -126,8 +127,13 @@ createGame: function() {
                    //console.log("this.numberOne:", this.numberOne);
                    this.visualNumbers.push(this.numberOne);
                 }
-                this.solution.push(this.operatorOne);
-                this.solution.push(this.numberTwo);
+                if (this.operatorOne === '') {
+                   this.createGame();
+                }
+                else {
+                     this.solution.push(this.operatorOne);
+                     this.solution.push(this.numberTwo);
+                }
         },
         solutionFlip : function() {
                       this.solutionDisplay = true;
@@ -138,11 +144,13 @@ createGame: function() {
                    if (this.operatorGuess === this.solution[0] &&
                       (this.numberGuess / 1 ) === this.solution[1]) {
                       this.correctGuess = true;
+		      ++this.currentNumCorrect;
                       console.log("hotmama");
                    }
                    //console.log("this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
                    else {
                         this.incorrectGuess = true;
+			this.currentNumCorrect = 0;
                    }
                    console.log("operatorGuess:", this.operatorGuess, "numberGuess:", this.numberGuess, "this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
                    this.operatorGuess = '';

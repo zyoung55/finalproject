@@ -16,7 +16,7 @@ export default new Vuex.Store({
 	    user: state => state.user,
 		loggedIn: state => state.loggedIn,
 		loginError: state => state.loginError,
-		rgisterError: state => state.registerError
+		registerError: state => state.registerError
 	},
 	    mutations: {
 	    setUser (state, user) {
@@ -64,18 +64,22 @@ export default new Vuex.Store({
 			    if (error.response.status === 400) {
 				    context.commit('setLoginError', "Invalid credentials.")
 			    }
-			    if (error.response.status === 403) {
+			    else if (error.response.status === 403) {
 				context.commit('setRegisterError', "Email already in use.")
 			    }
-			    if (error.response.status === 409) {
+			    else if (error.response.status === 409) {
 				context.commit('setRegisterError', "Username already in use.")
 			    }
-		    return;
-			})
-		    context.commit('setRegisterError', "Unknown problem. We will resolve it as fast as possible.")
+			    else { 
+				context.commit('setRegisterError', "Unknown problem. We will resolve it as fast as possible.")
+			    }
+			});
 		    },
 	    logout (context, user) {
 		context.commit('setUser', {});
+		context.commit('setLogin', false);
+		context.commit('setLoginError', '');
+		context.commit('setRegisterError', '');
 	    }
 	 }
 });

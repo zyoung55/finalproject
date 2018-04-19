@@ -11,19 +11,20 @@ already, please feel free to make a username and password so your scores can be 
         </form>
     </div>
     <div v-if="gameStarted">
+        <p>Current number correct:  {{ currentNumRight }} </p>   
        <ul>
          <li v-for="number in visualNumbers">
 	     {{ number }} 
 	 </li>
        </ul>
-       <form v-on:submit.prevent="solutionFlip">
-         <button type="submit">Show Solution</button>
-       </form>
        <form v-on:submit.prevent="checkGuess">
        	  <input v-model="operatorGuess" placeholder="Operator Guess">
 	  <input v-model="numberGuess" placeholder="Integer Guess">
 	  <button type="submit">Guess</button>
        </form>  
+       <form v-on:submit.prevent="solutionFlip">
+         <button type="submit">Show Solution</button>
+       </form>
        <div v-if="correctGuess">
        	  <p> You're right. Great job! Press "Start Game" to try again.</p>
        </div>
@@ -62,6 +63,7 @@ already, please feel free to make a username and password so your scores can be 
 	  numberTwo: 0,
 	  operatorGuess: '',
 	  numberGuess: '',
+	  currentNumRight: 0,
 	  }
    },
    methods: {
@@ -121,26 +123,31 @@ already, please feel free to make a username and password so your scores can be 
 		   if (this.operatorOne === '/') {
 		      this.numberOne /= this.numberTwo;
 		   }
-		   //console.log("this.numberOne:", this.numberOne);
 		   this.visualNumbers.push(this.numberOne);
+		}  
+		if (this.operatorOne === '') {
+		   this.createGame();
 		}
-		this.solution.push(this.operatorOne);
-		this.solution.push(this.numberTwo);
+		else {
+		     this.solution.push(this.operatorOne);
+		     this.solution.push(this.numberTwo);
+		}
 	}, 
 	solutionFlip : function() {
 		      this.solutionDisplay = true;
 	},
 	checkGuess : function() {
-		   //this.correctGuess = false;
 		   this.incorrectGuess = false;
 		   if (this.operatorGuess === this.solution[0] && 
 		      (this.numberGuess / 1 ) === this.solution[1]) {
 		      this.correctGuess = true;
+		      ++this.currentNumRight;
+		      console.log(this.currentNumRight);
 		      console.log("hotmama");
 		   }
-		   //console.log("this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
 		   else { 
 		   	this.incorrectGuess = true;
+			this.currentNumRight = 0;
 		   }
 		   console.log("operatorGuess:", this.operatorGuess, "numberGuess:", this.numberGuess, "this.solution[0]", this.solution[0], "this.solution[1]", this.solution[1]);
 		   this.operatorGuess = '';

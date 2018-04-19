@@ -5,13 +5,19 @@
 	  <li><router-link to="/">Home</router-link></li>
 	  <li><router-link to="/Register">Register</router-link></li>
 	</ul>
-	<div>
+	<span id="forms">
         <form v-on:submit.prevent="userLogin">
 	   <input v-model="email" placeholder="Email">
-	   <input v-model="password" placeholder="Password">
+	   <input type="password" v-model="password" placeholder="Password">
 	   <button type="submit">Login</button>
 	</form>
-	</div>
+	<form v-on:submit.prevent="userLogout">
+	   <button id="logOut" type="submit">Logout</button>
+	</form>
+     	<div v-if="loggedIn">
+            <p id="username"> current user: {{this.$store.getters.user.username}} </p>
+     	</div>
+        </span>
      </nav>
      <h1>Pattern Analyzer: The game!</h1>
    </div>
@@ -26,6 +32,11 @@ export default {
 	  password: '',
 	  }
       },
+      computed: {
+      	 loggedIn: function() {
+         return this.$store.getters.loggedIn;
+	 }
+      },
       methods: {
       	       userLogin: function() {
 	         this.$store.dispatch('login', {
@@ -34,7 +45,10 @@ export default {
 		    })
 		    this.email = '',
 		    this.password = ''
-		    }
+	        },
+		userLogout: function() {
+		this.$store.dispatch('logout')
+		},       
 	},
 }
 </script>
@@ -54,7 +68,7 @@ form {
 #createAccount {
        float: right;
        text-align: center;
-       display: inline-block;
+       display: inline;
        height: 20px;
 }
 
@@ -81,4 +95,18 @@ h1 {
    background-color: #E8D48C
 }
 
+#username {
+   border: black 1px;
+   display: inline-block;
+   float: right;
+}
+
+#logOut {
+   display: inline-block;
+   float: right;
+}
+
+#forms {
+       display: inline;
+}
 </style>
